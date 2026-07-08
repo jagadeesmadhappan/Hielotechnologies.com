@@ -1,0 +1,387 @@
+<!--
+  HIELO — Quantitative Research Partner (HQRP)
+  Single-file immersive experience (standalone preview of the Next.js build).
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HIELO — Discover Patterns Before the Market Does</title>
+<meta name="description" content="HIELO Quantitative Research Partner — AI-powered quantitative research that discovers repeatable, statistically significant patterns in Forex and Gold markets." />
+<meta name="theme-color" content="#05070A" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#05070A;--ink-2:#080B10;--graphite:#0E141B;--graphite-2:#161E28;
+  --line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.14);
+  --blue:#2E8BFF;--blue-soft:#6FB4FF;--gold:#D9B872;--gold-soft:#EAD6A6;
+  --white:#F4F7FB;--muted:#7C879A;--muted-2:#545E70;
+  --glass:rgba(20,27,36,.42);--glass-brd:rgba(255,255,255,.10);
+  --font-sans:'Inter',system-ui,sans-serif;--font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);--ease-out:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(24px,6vw,120px);--maxw:1280px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--ink);color:var(--white);font-family:var(--font-sans);font-weight:300;line-height:1.5;overflow-x:hidden}
+body.loading{overflow:hidden;height:100vh}
+::selection{background:rgba(46,139,255,.28);color:#fff}
+a{color:inherit;text-decoration:none}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(120% 90% at 50% -10%,transparent 55%,rgba(0,0,0,.55) 100%),radial-gradient(100% 100% at 50% 120%,transparent 60%,rgba(0,0,0,.4) 100%)}
+#loader{position:fixed;inset:0;z-index:200;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;transition:opacity 1.1s var(--ease),visibility 1.1s}
+#loader.done{opacity:0;visibility:hidden}
+.loader-mark{font-weight:200;letter-spacing:.42em;font-size:clamp(22px,4vw,34px);padding-left:.42em}
+.loader-mark span{opacity:0;display:inline-block;transform:translateY(14px);animation:letterUp .7s var(--ease-out) forwards}
+@keyframes letterUp{to{opacity:1;transform:none}}
+.loader-sub{font-family:var(--font-mono);font-size:11px;letter-spacing:.35em;color:var(--muted-2);text-transform:uppercase;opacity:0;animation:fade 1s ease .9s forwards}
+.loader-bar{width:min(220px,42vw);height:1px;background:var(--line);position:relative;overflow:hidden}
+.loader-bar i{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--blue),var(--gold));box-shadow:0 0 18px rgba(46,139,255,.55)}
+.loader-pct{font-family:var(--font-mono);font-size:10px;letter-spacing:.3em;color:var(--muted-2)}
+@keyframes fade{to{opacity:1}}
+#field{position:fixed;inset:0;z-index:0;pointer-events:none}
+#wash{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(90% 60% at 70% 20%,rgba(46,139,255,.05),transparent 60%),radial-gradient(70% 50% at 20% 80%,rgba(217,184,114,.045),transparent 60%)}
+nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:20px var(--pad);transition:background .5s var(--ease),backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(5,7,10,.55);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:300;letter-spacing:.34em;font-size:15px}
+.brand b{font-weight:400}
+.brand .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 12px var(--blue);position:relative}
+.brand .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(46,139,255,.4);animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.6);opacity:0}}
+.nav-links{display:flex;gap:34px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--muted)}
+.nav-links a{position:relative;transition:color .35s}
+.nav-links a:hover{color:var(--white)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--blue);transition:width .4s var(--ease)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--white);border:1px solid var(--line-2);padding:9px 18px;border-radius:2px;transition:all .4s var(--ease)}
+.nav-cta:hover{border-color:var(--blue);box-shadow:0 0 20px rgba(46,139,255,.25);background:rgba(46,139,255,.06)}
+@media(max-width:820px){.nav-links{display:none}}
+main{position:relative;z-index:10}
+.section{position:relative;padding:clamp(90px,14vh,180px) var(--pad);max-width:var(--maxw);margin:0 auto}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.28em;color:var(--blue-soft);text-transform:uppercase;margin-bottom:26px;display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--blue)}
+h1,h2,h3{font-weight:200;letter-spacing:-.02em;line-height:1.04}
+h1{font-size:clamp(38px,6.4vw,88px)}h2{font-size:clamp(30px,4.6vw,62px)}h3{font-size:clamp(20px,2.2vw,28px);font-weight:300}
+.lead{font-size:clamp(16px,1.5vw,20px);color:var(--muted);max-width:56ch;line-height:1.65}
+.thin-em{color:var(--white)}.gold{color:var(--gold-soft)}
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease-out),transform 1s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:120px;max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+#hero h1{max-width:16ch}
+.hero-tag{font-family:var(--font-mono);font-size:12px;letter-spacing:.3em;color:var(--gold-soft);text-transform:uppercase;margin-bottom:30px;display:flex;gap:14px;align-items:center}
+.hero-tag::before{content:"";width:30px;height:1px;background:var(--gold)}
+.hero-sub{margin-top:32px;max-width:50ch;font-size:clamp(16px,1.6vw,21px);color:var(--muted)}
+.hero-actions{display:flex;gap:16px;margin-top:48px;flex-wrap:wrap}
+.btn{position:relative;font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;padding:15px 30px;border-radius:2px;overflow:hidden;transition:transform .4s var(--ease);display:inline-flex;align-items:center;gap:10px;cursor:pointer;border:1px solid transparent}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:linear-gradient(120deg,var(--blue),#1E6FE0);color:#fff;box-shadow:0 8px 40px rgba(46,139,255,.25)}
+.btn-primary:hover{box-shadow:0 10px 50px rgba(46,139,255,.45)}
+.btn-ghost{border-color:var(--line-2);color:var(--white)}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(217,184,114,.05);box-shadow:0 0 26px rgba(217,184,114,.14)}
+.btn .arrow{transition:transform .4s var(--ease)}
+.btn:hover .arrow{transform:translateX(4px)}
+.ripple{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:rgba(255,255,255,.35);pointer-events:none;animation:rip .6s ease-out}
+@keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+.scroll-hint{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:10px;letter-spacing:.3em;color:var(--muted-2);display:flex;flex-direction:column;align-items:center;gap:10px;text-transform:uppercase}
+.scroll-hint .rail{width:1px;height:44px;background:linear-gradient(var(--muted-2),transparent);position:relative;overflow:hidden}
+.scroll-hint .rail::after{content:"";position:absolute;top:0;left:0;width:1px;height:14px;background:var(--blue);animation:railrun 2.2s var(--ease) infinite}
+@keyframes railrun{0%{transform:translateY(-14px)}100%{transform:translateY(44px)}}
+.hero-stats{display:flex;gap:clamp(28px,5vw,72px);margin-top:70px;flex-wrap:wrap;padding-top:34px;border-top:1px solid var(--line)}
+.stat .n{font-size:clamp(26px,3vw,40px);font-weight:200;letter-spacing:-.02em}
+.stat .n em{font-style:normal;color:var(--gold-soft)}
+.stat .l{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-top:8px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,90px);align-items:center}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.who-visual{aspect-ratio:1;border-radius:6px;position:relative;overflow:hidden;border:1px solid var(--glass-brd);background:var(--glass);backdrop-filter:blur(8px)}
+.who-visual canvas{width:100%;height:100%;display:block}
+.who-points li{list-style:none;padding:20px 0;border-bottom:1px solid var(--line);display:flex;gap:18px}
+.who-points li:last-child{border-bottom:none}
+.who-points .k{font-family:var(--font-mono);font-size:12px;color:var(--blue-soft);letter-spacing:.1em;min-width:34px}
+.who-points .v strong{font-weight:400;display:block;margin-bottom:5px;font-size:17px}
+.who-points .v span{color:var(--muted);font-size:15px}
+.pipeline{margin-top:64px;position:relative}
+.stage{display:grid;grid-template-columns:64px 1fr;gap:24px;align-items:start;padding:24px 0;position:relative}
+.stage .idx{font-family:var(--font-mono);font-size:12px;color:var(--muted-2);letter-spacing:.1em;border:1px solid var(--line);width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--ink-2);transition:border-color .5s,color .5s,box-shadow .5s;position:relative;z-index:2}
+.stage.on .idx{border-color:var(--blue);color:var(--white);box-shadow:0 0 22px rgba(46,139,255,.4)}
+.stage .body h3{margin-bottom:6px}
+.stage .body p{color:var(--muted);max-width:52ch;font-size:15px}
+.pipeline .rail{position:absolute;left:31px;top:36px;bottom:36px;width:1px;background:var(--line);z-index:1}
+.pipeline .rail i{position:absolute;top:0;left:0;width:1px;height:0;background:linear-gradient(var(--blue),var(--gold));box-shadow:0 0 12px rgba(46,139,255,.5);transition:height 1.4s var(--ease)}
+#net-wrap{position:relative;margin-top:56px;border-radius:6px;overflow:hidden;border:1px solid var(--glass-brd);background:linear-gradient(180deg,rgba(14,20,27,.5),rgba(5,7,10,.5));backdrop-filter:blur(6px)}
+#net{width:100%;height:min(60vh,520px);display:block;cursor:crosshair}
+.net-hint{position:absolute;left:20px;bottom:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;color:var(--muted-2)}
+.dash{margin-top:56px;border:1px solid var(--glass-brd);border-radius:10px;overflow:hidden;background:linear-gradient(180deg,rgba(16,22,30,.6),rgba(6,9,13,.72));backdrop-filter:blur(14px);box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.dash-bar{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.dash-bar .dots{display:flex;gap:7px}
+.dash-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--graphite-2);border:1px solid var(--line-2)}
+.dash-bar .title{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--muted)}
+.dash-bar .badge{margin-left:auto;font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;color:var(--gold-soft);border:1px solid rgba(217,184,114,.3);padding:4px 10px;border-radius:20px}
+.dash-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:1px;background:var(--line)}
+@media(max-width:820px){.dash-grid{grid-template-columns:1fr}}
+.panel{background:var(--ink-2);padding:22px}
+.panel .h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.panel .h .t{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.panel .h .v{font-family:var(--font-mono);font-size:12px;color:var(--blue-soft)}
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.mini{background:var(--ink-2);padding:18px}
+.metric{font-size:clamp(22px,2.4vw,30px);font-weight:200;letter-spacing:-.02em}
+.metric em{font-style:normal;font-size:13px;color:var(--gold-soft);margin-left:6px}
+.metric.pos em{color:#6FE0A8}
+.mlabel{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-top:6px}
+.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
+.heat i{aspect-ratio:1;border-radius:2px;background:var(--graphite);transition:transform .3s}
+.heat i:hover{transform:scale(1.25);z-index:2}
+.legend{display:flex;gap:16px;margin-top:14px;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.1em}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend b{width:10px;height:10px;border-radius:2px;display:inline-block}
+.bars{display:flex;align-items:flex-end;gap:8px;height:120px}
+.bars .bar{flex:1;background:linear-gradient(180deg,var(--blue),rgba(46,139,255,.15));border-radius:2px 2px 0 0;position:relative;transition:height 1s var(--ease)}
+.bars .bar.gold{background:linear-gradient(180deg,var(--gold),rgba(217,184,114,.15))}
+.bars-lab{display:flex;gap:8px;margin-top:8px;font-family:var(--font-mono);font-size:9px;color:var(--muted-2);letter-spacing:.08em}
+.bars-lab span{flex:1;text-align:center}
+.disclaimer{font-family:var(--font-mono);font-size:10px;color:var(--muted-2);letter-spacing:.1em;padding:14px 18px;border-top:1px solid var(--line);background:rgba(0,0,0,.2)}
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
+@media(max-width:1000px){.tech-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tech-grid{grid-template-columns:1fr}}
+.card{position:relative;padding:26px 22px;border-radius:6px;min-height:170px;border:1px solid var(--glass-brd);background:var(--glass);backdrop-filter:blur(10px);transition:transform .5s var(--ease),border-color .5s,box-shadow .5s;overflow:hidden;transform-style:preserve-3d;display:flex;flex-direction:column}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(120px 120px at var(--mx,50%) var(--my,0%),rgba(46,139,255,.14),transparent 70%);opacity:0;transition:opacity .5s}
+.card:hover{border-color:var(--line-2);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.card:hover::before{opacity:1}
+.card .num{font-family:var(--font-mono);font-size:11px;color:var(--muted-2);letter-spacing:.14em}
+.card .ico{font-size:28px;margin:18px 0 auto;color:var(--blue-soft)}
+.card h3{font-size:18px;font-weight:400;margin-top:auto}
+.card p{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.55}
+.vision{text-align:center;max-width:880px;margin-inline:auto}
+.vision h2{margin-bottom:28px}
+.vision .lead{margin-inline:auto;text-align:center}
+.vision-row{display:flex;gap:clamp(20px,4vw,54px);justify-content:center;flex-wrap:wrap;margin-top:56px}
+.vision-row .vi{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;padding:12px 0}
+.vision-row .vi::before{content:"◆";color:var(--gold);margin-right:12px;font-size:8px;vertical-align:middle}
+footer{position:relative;z-index:10;border-top:1px solid var(--line);margin-top:60px;padding:70px var(--pad) 40px;max-width:var(--maxw);margin-inline:auto}
+.foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:56px}
+.foot-brand .brand{font-size:20px;margin-bottom:16px}
+.foot-brand p{color:var(--muted);max-width:34ch;font-size:14px}
+.foot-cols{display:flex;gap:clamp(40px,7vw,90px);flex-wrap:wrap}
+.foot-col h4{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;color:var(--muted-2);text-transform:uppercase;margin-bottom:18px;font-weight:400}
+.foot-col a{display:block;color:var(--muted);font-size:14px;padding:6px 0;transition:color .3s}
+.foot-col a:hover{color:var(--white)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-top:28px;border-top:1px solid var(--line);font-family:var(--font-mono);font-size:11px;color:var(--muted-2);letter-spacing:.1em}
+.foot-bottom .socials{display:flex;gap:20px}
+.foot-bottom .socials a:hover{color:var(--blue-soft)}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}html{scroll-behavior:auto}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body class="loading">
+<div id="loader">
+  <div class="loader-mark" id="loaderMark">HIELO</div>
+  <div class="loader-sub">Quantitative Research Partner</div>
+  <div class="loader-bar"><i id="loaderFill"></i></div>
+  <div class="loader-pct"><span id="loaderPct">0</span>% — initialising research field</div>
+</div>
+<canvas id="field"></canvas>
+<div id="wash"></div>
+<nav id="nav">
+  <div class="brand"><span class="dot"></span>H<b>IELO</b></div>
+  <div class="nav-links">
+    <a href="#who">Who We Are</a><a href="#philosophy">Research</a><a href="#network">Intelligence</a><a href="#dashboard">Platform</a><a href="#vision">Vision</a>
+  </div>
+  <a href="#philosophy" class="nav-cta">Our Methodology</a>
+</nav>
+<main>
+  <section id="hero">
+    <div class="hero-tag reveal in">HQRP — Institutional-grade research</div>
+    <h1 class="reveal in d1">We don't predict markets.<br>We discover <span class="gold">repeatable market behaviour.</span></h1>
+    <p class="hero-sub reveal in d2">AI-powered quantitative research for Forex and Gold markets — surfacing statistically significant patterns hidden in decades of price history.</p>
+    <div class="hero-actions reveal in d3">
+      <a href="#philosophy" class="btn btn-primary">Explore Research <span class="arrow">→</span></a>
+      <a href="#philosophy" class="btn btn-ghost">Our Methodology</a>
+    </div>
+    <div class="hero-stats reveal in d4">
+      <div class="stat"><div class="n"><em>18</em>Y+</div><div class="l">Historical data studied</div></div>
+      <div class="stat"><div class="n"><em>2</em>M+</div><div class="l">Behaviours evaluated</div></div>
+      <div class="stat"><div class="n">p&lt;<em>0.01</em></div><div class="l">Validation threshold</div></div>
+      <div class="stat"><div class="n"><em>0</em></div><div class="l">Signals sold, ever</div></div>
+    </div>
+    <div class="scroll-hint"><span>Scroll</span><div class="rail"></div></div>
+  </section>
+
+  <section id="who" class="section">
+    <div class="eyebrow reveal">§ 01 — Who We Are</div>
+    <div class="split">
+      <div>
+        <h2 class="reveal d1">A research firm,<br>not a trading desk.</h2>
+        <p class="lead reveal d2" style="margin-top:28px">HIELO builds AI systems that read market history the way a research lab reads data — methodically, sceptically, and at scale. <span class="thin-em">We are not a broker. We do not sell signals. We do not run copy-trading.</span> Our single output is rigorous, reproducible research into how Forex and Gold markets actually behave.</p>
+        <ul class="who-points reveal d3" style="margin-top:36px">
+          <li><span class="k">01</span><span class="v"><strong>Evidence over intuition</strong><span>Every claimed pattern must survive out-of-sample testing before it enters the library.</span></span></li>
+          <li><span class="k">02</span><span class="v"><strong>Repeatability first</strong><span>We study behaviours that recur — not one-off forecasts about tomorrow's candle.</span></span></li>
+          <li><span class="k">03</span><span class="v"><strong>Institutional discipline</strong><span>Statistical validation, confidence scoring, and full audit trails on every finding.</span></span></li>
+        </ul>
+      </div>
+      <div class="who-visual reveal d2"><canvas id="whoCanvas"></canvas></div>
+    </div>
+  </section>
+
+  <section id="philosophy" class="section">
+    <div class="eyebrow reveal">§ 02 — Research Philosophy</div>
+    <h2 class="reveal d1" style="max-width:14ch">From raw ticks to<br>validated behaviour.</h2>
+    <p class="lead reveal d2" style="margin-top:24px">A disciplined pipeline turns noisy market data into findings you could defend in a research review.</p>
+    <div class="pipeline" id="pipeline">
+      <div class="rail"><i id="pipeFill"></i></div>
+      <div class="stage"><div class="idx">01</div><div class="body"><h3>Raw Market Data</h3><p>Years of tick-level Forex &amp; Gold history ingested from institutional-grade sources.</p></div></div>
+      <div class="stage"><div class="idx">02</div><div class="body"><h3>Cleaning</h3><p>Gaps, outliers, session boundaries and instrument quirks are normalised and reconciled.</p></div></div>
+      <div class="stage"><div class="idx">03</div><div class="body"><h3>Feature Engineering</h3><p>Volatility regimes, session structure, VWAP relationships and volume signatures are derived.</p></div></div>
+      <div class="stage"><div class="idx">04</div><div class="body"><h3>Pattern Discovery</h3><p>Machine-learning search scans for behaviours that recur far more often than chance allows.</p></div></div>
+      <div class="stage"><div class="idx">05</div><div class="body"><h3>Statistical Validation</h3><p>Candidates face out-of-sample tests, multiple-comparison correction and significance thresholds.</p></div></div>
+      <div class="stage"><div class="idx">06</div><div class="body"><h3>Confidence Analysis</h3><p>Survivors are scored for strength, stability and regime-dependence — no black boxes.</p></div></div>
+      <div class="stage"><div class="idx">07</div><div class="body"><h3>Research Library</h3><p>Validated behaviours are catalogued, versioned and continuously re-tested against new data.</p></div></div>
+    </div>
+  </section>
+
+  <section id="network" class="section">
+    <div class="eyebrow reveal">§ 03 — Interactive Intelligence</div>
+    <h2 class="reveal d1" style="max-width:16ch">The research field,<br>reacting to you.</h2>
+    <p class="lead reveal d2" style="margin-top:24px">Our discovery engine connects thousands of market observations into a living graph. Move through it.</p>
+    <div id="net-wrap" class="reveal d2"><canvas id="net"></canvas><div class="net-hint">move cursor · nodes respond</div></div>
+  </section>
+
+  <section id="dashboard" class="section">
+    <div class="eyebrow reveal">§ 04 — Platform Preview</div>
+    <h2 class="reveal d1" style="max-width:16ch">Where research<br>becomes explorable.</h2>
+    <p class="lead reveal d2" style="margin-top:24px">A first look at the internal research environment. Illustrative data — implementation details intentionally omitted.</p>
+    <div class="dash reveal d2">
+      <div class="dash-bar"><div class="dots"><i></i><i></i><i></i></div><div class="title">HQRP · Pattern Explorer</div><div class="badge">PREVIEW</div></div>
+      <div class="dash-grid">
+        <div class="panel">
+          <div class="h"><span class="t">Pattern Explorer — XAU/USD</span><span class="v" id="patStat">confidence 0.94</span></div>
+          <canvas id="dashChart" height="220" style="width:100%"></canvas>
+          <div class="legend"><span><b style="background:var(--blue)"></b>Discovered behaviour</span><span><b style="background:var(--gold)"></b>VWAP band</span><span><b style="background:var(--muted-2)"></b>Price</span></div>
+        </div>
+        <div class="panel" style="display:flex;flex-direction:column;gap:20px">
+          <div class="sub-grid" style="border-radius:4px;overflow:hidden">
+            <div class="mini"><div class="metric pos">+2.31<em>R</em></div><div class="mlabel">Avg. expectancy</div></div>
+            <div class="mini"><div class="metric">61.4<em>%</em></div><div class="mlabel">Hit rate (OOS)</div></div>
+            <div class="mini"><div class="metric">1,204</div><div class="mlabel">Occurrences</div></div>
+            <div class="mini"><div class="metric">0.94</div><div class="mlabel">Confidence score</div></div>
+          </div>
+          <div>
+            <div class="h"><span class="t">Session heatmap</span><span class="v">London · NY · Asia</span></div>
+            <div class="heat" id="heat"></div>
+            <div class="legend"><span><b style="background:var(--graphite)"></b>low</span><span><b style="background:var(--blue)"></b>elevated</span><span><b style="background:var(--gold)"></b>peak</span></div>
+          </div>
+          <div>
+            <div class="h"><span class="t">ORB / Volume by session</span><span class="v">relative</span></div>
+            <div class="bars" id="bars"></div>
+            <div class="bars-lab"><span>00</span><span>04</span><span>08</span><span>12</span><span>16</span><span>20</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="disclaimer">Illustrative preview · figures are synthetic · not investment advice · HIELO does not sell signals or execute trades.</div>
+    </div>
+  </section>
+
+  <section id="tech" class="section">
+    <div class="eyebrow reveal">§ 05 — Technology</div>
+    <h2 class="reveal d1" style="max-width:15ch">Built like a lab,<br>not a product demo.</h2>
+    <div class="tech-grid">
+      <div class="card reveal"><div class="num">/01</div><div class="ico">🛰</div><h3>AI Research</h3><p>Autonomous search across enormous behaviour spaces.</p></div>
+      <div class="card reveal d1"><div class="num">/02</div><div class="ico">◈</div><h3>Machine Learning</h3><p>Models tuned for signal-vs-noise separation.</p></div>
+      <div class="card reveal d2"><div class="num">/03</div><div class="ico">‹/›</div><h3>Python</h3><p>The research stack, end to end and reproducible.</p></div>
+      <div class="card reveal d3"><div class="num">/04</div><div class="ico">∑</div><h3>Statistical Models</h3><p>Significance, correction, and confidence scoring.</p></div>
+      <div class="card reveal"><div class="num">/05</div><div class="ico">⛁</div><h3>Data Engineering</h3><p>Tick-level pipelines built for scale and integrity.</p></div>
+      <div class="card reveal d1"><div class="num">/06</div><div class="ico">◎</div><h3>Pattern Recognition</h3><p>Detecting recurrence beneath market noise.</p></div>
+      <div class="card reveal d2"><div class="num">/07</div><div class="ico">↺</div><h3>Backtesting</h3><p>Rigorous out-of-sample validation frameworks.</p></div>
+      <div class="card reveal d3"><div class="num">/08</div><div class="ico">⚙</div><h3>Automation</h3><p>Continuous re-testing as new data arrives.</p></div>
+    </div>
+  </section>
+
+  <section id="vision" class="section vision">
+    <div class="eyebrow reveal" style="justify-content:center">§ 06 — Future Vision</div>
+    <h2 class="reveal d1">Continuous discovery,<br>as an institution.</h2>
+    <p class="lead reveal d2">Markets evolve; so must the research. HIELO is building an engine that never stops learning — turning quantitative finance into a living, self-correcting body of evidence rather than a fixed set of rules.</p>
+    <div class="vision-row reveal d3">
+      <div class="vi">Artificial Intelligence</div><div class="vi">Research</div><div class="vi">Quantitative Finance</div><div class="vi">Continuous Discovery</div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="foot-top">
+    <div class="foot-brand">
+      <div class="brand"><span class="dot"></span>H<b>IELO</b></div>
+      <p>HIELO Quantitative Research Partner — discovering patterns before the market does.</p>
+    </div>
+    <div class="foot-cols">
+      <div class="foot-col"><h4>Research</h4><a href="#philosophy">Methodology</a><a href="#network">Intelligence</a><a href="#dashboard">Platform</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="#who">Who We Are</a><a href="#vision">Vision</a><a href="#">Careers</a></div>
+      <div class="foot-col"><h4>Contact</h4><a href="mailto:research@hielo.tech">research@hielo.tech</a><a href="#">Press</a></div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 HIELO Technologie · Quantitative Research Partner</span>
+    <div class="socials"><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">Research Notes</a></div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const REDUCED=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const lerp=(a,b,t)=>a+(b-a)*t;const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+/* THREE.js research field */
+(function field(){
+  if(!window.THREE)return;
+  const canvas=document.getElementById('field');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.8));
+  const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x05070A,0.055);
+  const camera=new THREE.PerspectiveCamera(52,innerWidth/innerHeight,0.1,100);camera.position.set(0,0,14);
+  const group=new THREE.Group();scene.add(group);
+  const CORE=1300;const cpos=new Float32Array(CORE*3),cphase=new Float32Array(CORE),ctone=new Float32Array(CORE);const nodeXYZ=[];
+  const gr=Math.PI*(3-Math.sqrt(5));
+  for(let i=0;i<CORE;i++){const y=1-(i/(CORE-1))*2;const r=Math.sqrt(1-y*y);const th=gr*i;const j=0.86+Math.random()*0.3;const x=Math.cos(th)*r*j,z=Math.sin(th)*r*j,Y=y*j;const R=4.6;cpos[i*3]=x*R;cpos[i*3+1]=Y*R;cpos[i*3+2]=z*R;cphase[i]=Math.random()*Math.PI*2;ctone[i]=Math.random()<0.16?1:0;if(i%4===0)nodeXYZ.push([x*R,Y*R,z*R]);}
+  const cgeo=new THREE.BufferGeometry();cgeo.setAttribute('position',new THREE.BufferAttribute(cpos,3));cgeo.setAttribute('aphase',new THREE.BufferAttribute(cphase,1));cgeo.setAttribute('atone',new THREE.BufferAttribute(ctone,1));
+  const cmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uSize:{value:innerHeight*0.10},uDisperse:{value:0}},
+    vertexShader:`attribute float aphase;attribute float atone;uniform float uTime;uniform float uSize;uniform float uDisperse;varying float vTone;varying float vTw;void main(){vTone=atone;vec3 p=position;float br=1.0+0.05*sin(uTime*0.6+aphase);p*=br*(1.0+uDisperse*0.6);p+=normalize(p)*sin(uTime*0.5+aphase)*0.12;vec4 mv=modelViewMatrix*vec4(p,1.0);float tw=0.55+0.45*sin(uTime*1.6+aphase);vTw=tw;gl_PointSize=uSize*(0.5+tw)*(1.0/-mv.z);gl_Position=projectionMatrix*mv;}`,
+    fragmentShader:`precision mediump float;varying float vTone;varying float vTw;void main(){vec2 uv=gl_PointCoord-0.5;float d=length(uv);if(d>0.5)discard;float a=smoothstep(0.5,0.0,d);vec3 blue=vec3(0.18,0.55,1.0);vec3 gold=vec3(0.85,0.72,0.45);vec3 col=mix(blue,gold,vTone);gl_FragColor=vec4(col,a*vTw*0.9);}`});
+  group.add(new THREE.Points(cgeo,cmat));
+  const segs=[];for(let i=0;i<nodeXYZ.length;i++){for(let j=i+1;j<nodeXYZ.length;j++){const a=nodeXYZ[i],b=nodeXYZ[j];const dx=a[0]-b[0],dy=a[1]-b[1],dz=a[2]-b[2];if(dx*dx+dy*dy+dz*dz<2.1){segs.push(a,b);if(segs.length>560)break;}}if(segs.length>560)break;}
+  const lpos=new Float32Array(segs.length*3);segs.forEach((s,k)=>{lpos[k*3]=s[0];lpos[k*3+1]=s[1];lpos[k*3+2]=s[2];});
+  const lgeo=new THREE.BufferGeometry();lgeo.setAttribute('position',new THREE.BufferAttribute(lpos,3));
+  const lmat=new THREE.LineBasicMaterial({color:0x2E8BFF,transparent:true,opacity:0.12,blending:THREE.AdditiveBlending,depthWrite:false});
+  group.add(new THREE.LineSegments(lgeo,lmat));
+  const AMB=1800;const apos=new Float32Array(AMB*3);for(let i=0;i<AMB;i++){const r=8+Math.random()*22,t=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);apos[i*3]=r*Math.sin(ph)*Math.cos(t);apos[i*3+1]=r*Math.sin(ph)*Math.sin(t)*0.6;apos[i*3+2]=r*Math.cos(ph);}
+  const ageo=new THREE.BufferGeometry();ageo.setAttribute('position',new THREE.BufferAttribute(apos,3));
+  const ambient=new THREE.Points(ageo,new THREE.PointsMaterial({color:0x9fb4d6,size:0.03,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending}));scene.add(ambient);
+  const streams=[];for(let s=0;s<5;s++){const pts=[];for(let k=0;k<5;k++)pts.push(new THREE.Vector3((Math.random()-0.5)*16,(Math.random()-0.5)*10,(Math.random()-0.5)*16));const curve=new THREE.CatmullRomCurve3(pts,true);const N=14;const sp=new Float32Array(N*3);const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(sp,3));const pnts=new THREE.Points(g,new THREE.PointsMaterial({color:s%2?0xD9B872:0x2E8BFF,size:0.09,transparent:true,opacity:0.8,depthWrite:false,blending:THREE.AdditiveBlending}));scene.add(pnts);streams.push({curve,geo:g,arr:sp,N,off:Math.random(),speed:0.02+Math.random()*0.03});}
+  const mouse={x:0,y:0,tx:0,ty:0};addEventListener('pointermove',e=>{mouse.tx=(e.clientX/innerWidth-0.5);mouse.ty=(e.clientY/innerHeight-0.5);},{passive:true});
+  let scrollN=0,scrollTarget=0;const maxScroll=()=>document.body.scrollHeight-innerHeight;
+  addEventListener('scroll',()=>{scrollTarget=clamp(scrollY/Math.max(1,maxScroll()),0,1);},{passive:true});
+  addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();cmat.uniforms.uSize.value=innerHeight*0.10;});
+  renderer.setSize(innerWidth,innerHeight);
+  const clock=new THREE.Clock();
+  function tick(){const t=clock.getElapsedTime();scrollN=lerp(scrollN,scrollTarget,0.06);mouse.x=lerp(mouse.x,mouse.tx,0.05);mouse.y=lerp(mouse.y,mouse.ty,0.05);
+    cmat.uniforms.uTime.value=t;cmat.uniforms.uDisperse.value=Math.sin(scrollN*Math.PI)*0.5;
+    group.rotation.y=t*0.04+mouse.x*0.6;group.rotation.x=Math.sin(t*0.15)*0.08+mouse.y*0.4;ambient.rotation.y=-t*0.01;lmat.opacity=0.06+0.08*(0.5+0.5*Math.sin(t*0.8));
+    camera.position.set(Math.sin(scrollN*Math.PI*1.2)*2.6+mouse.x*1.2,lerp(0,1.4,scrollN)-mouse.y*1.0,lerp(14,7.5,scrollN));camera.lookAt(0,0,0);
+    streams.forEach(st=>{st.off=(st.off+st.speed*0.01)%1;for(let i=0;i<st.N;i++){const p=st.curve.getPointAt((st.off+i/st.N)%1);st.arr[i*3]=p.x;st.arr[i*3+1]=p.y;st.arr[i*3+2]=p.z;}st.geo.attributes.position.needsUpdate=true;});
+    renderer.render(scene,camera);requestAnimationFrame(tick);}
+  if(!REDUCED)tick();else renderer.render(scene,camera);
+})();
+/* Loader */
+(function loader(){const mark=document.getElementById('loaderMark');mark.innerHTML=mark.textContent.split('').map((c,i)=>`<span style="animation-delay:${i*0.08}s">${c}</span>`).join('');const fill=document.getElementById('loaderFill'),pct=document.getElementById('loaderPct');let p=0;const iv=setInterval(()=>{p+=Math.random()*16+6;if(p>=100){p=100;clearInterval(iv);setTimeout(()=>{document.getElementById('loader').classList.add('done');document.body.classList.remove('loading');},520);}fill.style.width=p+'%';pct.textContent=Math.floor(p);},140);})();
+const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.12});
+document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+(function pipeline(){const stages=[...document.querySelectorAll('#pipeline .stage')];const fill=document.getElementById('pipeFill');const pio=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');const done=stages.filter(s=>s.classList.contains('on')).length;fill.style.height=(done/stages.length*100)+'%';}});},{threshold:0.6});stages.forEach(s=>pio.observe(s));})();
+document.querySelectorAll('.btn').forEach(b=>{b.addEventListener('click',e=>{const r=document.createElement('span');r.className='ripple';const rect=b.getBoundingClientRect();const s=Math.max(rect.width,rect.height)*2;r.style.width=r.style.height=s+'px';r.style.left=(e.clientX-rect.left)+'px';r.style.top=(e.clientY-rect.top)+'px';b.appendChild(r);setTimeout(()=>r.remove(),620);});});
+document.querySelectorAll('.card').forEach(c=>{c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;c.style.setProperty('--mx',x+'px');c.style.setProperty('--my',y+'px');if(!REDUCED){const rx=((y/r.height)-0.5)*-6,ry=((x/r.width)-0.5)*6;c.style.transform=`perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;}});c.addEventListener('pointerleave',()=>c.style.transform='');});
+(function whoOrb(){const cv=document.getElementById('whoCanvas');if(!cv)return;const ctx=cv.getContext('2d');let W,H;function size(){const r=cv.getBoundingClientRect();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;W=cv.width;H=cv.height;}size();addEventListener('resize',size);const N=70,pts=[...Array(N)].map(()=>({a:Math.random()*6.28,r:0.2+Math.random()*0.75,sp:(Math.random()-0.5)*0.004,z:Math.random()}));function draw(){ctx.clearRect(0,0,W,H);const cx=W/2,cy=H/2,R=Math.min(W,H)*0.42;for(const p of pts)p.a+=p.sp;for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const a=pts[i],b=pts[j];const ax=cx+Math.cos(a.a)*a.r*R,ay=cy+Math.sin(a.a)*a.r*R*0.7;const bx=cx+Math.cos(b.a)*b.r*R,by=cy+Math.sin(b.a)*b.r*R*0.7;const d=Math.hypot(ax-bx,ay-by);if(d<R*0.5){ctx.strokeStyle=`rgba(46,139,255,${0.10*(1-d/(R*0.5))})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();}}for(const p of pts){const x=cx+Math.cos(p.a)*p.r*R,y=cy+Math.sin(p.a)*p.r*R*0.7;ctx.fillStyle=p.z>0.85?'rgba(217,184,114,.9)':'rgba(150,190,255,.85)';ctx.beginPath();ctx.arc(x,y,(p.z>0.85?2.2:1.4)*devicePixelRatio,0,6.28);ctx.fill();}if(!REDUCED)requestAnimationFrame(draw);}draw();})();
+(function network(){const cv=document.getElementById('net');if(!cv)return;const ctx=cv.getContext('2d');let W,H,DPR=Math.min(devicePixelRatio,2);const mouse={x:-999,y:-999};let nodes=[];function init(){const count=Math.floor(W*H/(22000*DPR));nodes=[...Array(Math.max(40,Math.min(120,count)))].map(()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.25,vy:(Math.random()-0.5)*0.25,g:Math.random()<0.14}));}function size(){const r=cv.getBoundingClientRect();cv.width=r.width*DPR;cv.height=r.height*DPR;W=cv.width;H=cv.height;init();}size();addEventListener('resize',size);cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mouse.x=(e.clientX-r.left)*DPR;mouse.y=(e.clientY-r.top)*DPR;});cv.addEventListener('pointerleave',()=>{mouse.x=mouse.y=-999;});const LINK=140*DPR,MOUSE=190*DPR;function draw(){ctx.clearRect(0,0,W,H);for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;const dx=mouse.x-n.x,dy=mouse.y-n.y,d=Math.hypot(dx,dy);if(d<MOUSE){n.x+=dx/d*0.4;n.y+=dy/d*0.4;}}for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<LINK){ctx.strokeStyle=`rgba(46,139,255,${(1-d/LINK)*0.22})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}for(const n of nodes){const d=Math.hypot(mouse.x-n.x,mouse.y-n.y);if(d<MOUSE){ctx.strokeStyle=`rgba(217,184,114,${(1-d/MOUSE)*0.5})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(mouse.x,mouse.y);ctx.lineTo(n.x,n.y);ctx.stroke();}ctx.beginPath();ctx.arc(n.x,n.y,n.g?2.6*DPR:1.6*DPR,0,6.28);ctx.fillStyle=n.g?'rgba(234,214,166,.95)':'rgba(150,190,255,.9)';if(n.g){ctx.shadowColor='rgba(217,184,114,.8)';ctx.shadowBlur=8;}else ctx.shadowBlur=0;ctx.fill();ctx.shadowBlur=0;}if(mouse.x>0){ctx.beginPath();ctx.arc(mouse.x,mouse.y,3*DPR,0,6.28);ctx.fillStyle='#2E8BFF';ctx.shadowColor='#2E8BFF';ctx.shadowBlur=16;ctx.fill();ctx.shadowBlur=0;}if(!REDUCED)requestAnimationFrame(draw);}draw();})();
+(function dashboard(){const cv=document.getElementById('dashChart');if(cv){const ctx=cv.getContext('2d');function series(n,vol,seed){let v=0.5;const a=[];for(let i=0;i<n;i++){v+=(Math.sin(i*0.3+seed)*0.02)+(Math.random()-0.5)*vol;v=Math.max(0.1,Math.min(0.9,v));a.push(v);}return a;}const price=series(80,0.05,1),pattern=series(80,0.02,3);function line(a,color,fill,w){const W=cv.width,H=cv.height;ctx.lineWidth=(w||1.5)*devicePixelRatio;ctx.strokeStyle=color;ctx.beginPath();a.forEach((v,i)=>{const x=i/(a.length-1)*W,y=H-v*H*0.9-H*0.05;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();if(fill){ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,fill);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fill();}}function draw(){const W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;for(let i=1;i<5;i++){const y=H/5*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}ctx.fillStyle='rgba(217,184,114,.06)';ctx.fillRect(0,H*0.32,W,H*0.28);line(price,'rgba(124,135,154,.7)',null,1.3);line(pattern,'rgba(46,139,255,.95)','rgba(46,139,255,.14)',1.8);}function size(){const r=cv.getBoundingClientRect();cv.width=r.width*devicePixelRatio;cv.height=220*devicePixelRatio;draw();}new ResizeObserver(size).observe(cv);size();}
+  const heat=document.getElementById('heat');if(heat){for(let i=0;i<48;i++){const v=Math.random();const el=document.createElement('i');el.style.background=v>0.82?'rgba(217,184,114,'+(0.5+v*0.5)+')':v>0.5?'rgba(46,139,255,'+(v*0.7)+')':'rgba(46,139,255,'+(v*0.25)+')';heat.appendChild(el);}}
+  const bars=document.getElementById('bars');if(bars){const data=[35,58,90,72,64,42];data.forEach((v,i)=>{const b=document.createElement('div');b.className='bar'+(i%2?' gold':'');b.style.height='0%';bars.appendChild(b);const bio=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){setTimeout(()=>b.style.height=v+'%',i*90);bio.disconnect();}});},{threshold:0.4});bio.observe(bars);});}
+  const stat=document.getElementById('patStat');if(stat){let c=0.94;setInterval(()=>{c=Math.min(0.99,Math.max(0.88,c+(Math.random()-0.5)*0.02));stat.textContent='confidence '+c.toFixed(2);},1600);}
+})();
+</script>
+</body>
+</html>
